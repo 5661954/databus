@@ -43,7 +43,7 @@ public class TestServerContainer
 {
   static Logger LOG = Logger.getLogger(TestServerContainer.class);
   static {
-    
+
     PatternLayout defaultLayout = new PatternLayout("%d{ISO8601} +%r [%t] (%p) {%c} %m%n");
     ConsoleAppender defaultAppender = new ConsoleAppender(defaultLayout);
 
@@ -75,7 +75,7 @@ public class TestServerContainer
       Assert.assertEquals(readTimeout+2, sConfig.getBstReadTimeoutMs());
     }
   }
-  
+
   @Test
   public void testContainerPort() throws Exception {
     ServerContainer.Config config = new ServerContainer.Config();
@@ -83,10 +83,10 @@ public class TestServerContainer
     ServerContainer.StaticConfig sConfig = config.build();
     int containerId = -1;
     int httpPort = -1;
-    
+
     Assert.assertEquals(sConfig.getHttpPort(), 9000);
-    
-   
+
+
     MyServerContainer sc = new MyServerContainer(sConfig);
     Assert.assertEquals(sc.getHttpPort(), -1);
     Assert.assertEquals(sc.getBaseDir(), ".");
@@ -103,16 +103,16 @@ public class TestServerContainer
     LOG.info("container id = " + sConfig.getId());
     Assert.assertNotEquals(containerId, sConfig.getId());
     containerId = sConfig.getId();
-    
+
     // now try with port 0
     config = new ServerContainer.Config();
     config.setContainerBaseDir("/tmp");
     config.getJmx().setRmiEnabled(false);
     config.setHttpPort(0);
     sConfig = config.build();
-    
+
     Assert.assertEquals(sConfig.getHttpPort(), 0);
-   
+
     sc = new MyServerContainer(sConfig);
     Assert.assertEquals(sc.getHttpPort(), -1);
     Assert.assertEquals(sc.getBaseDir(), "/tmp");
@@ -131,7 +131,7 @@ public class TestServerContainer
     Assert.assertNotEquals(containerId, sConfig.getId());
     Assert.assertEquals( sc.getHttpPortFileName(), "/tmp/containerPortNum_"+sConfig.getId());
   }
-  
+
   /* read port number from a file */
   private int readPort(ServerContainer sc) {
     File file = new File(sc.getHttpPortFileName());
@@ -150,8 +150,8 @@ public class TestServerContainer
     }
     return Integer.parseInt(new String(cbuf, 0, size));
   }
-  
-  
+
+
   class MyServerContainer extends ServerContainer
   {
     MyServerContainer(ServerContainer.StaticConfig sConfig) throws InvalidConfigException, IOException, DatabusException
@@ -161,10 +161,11 @@ public class TestServerContainer
 
     @Override
     protected DatabusComponentAdmin createComponentAdmin()
-    {  
-      return new DatabusComponentAdmin(this, null, "fake");  
+    {
+      return new DatabusComponentAdmin(this, null, "fake");
     }
 
+    @Override
     public void start() {
       super.doStart();
     }

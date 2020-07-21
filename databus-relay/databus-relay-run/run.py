@@ -26,7 +26,7 @@ script_dir = os.getcwd()
 module_name = "relay"
 
 if __name__=="__main__":
-  print "\n--- Invoking run.py target with arguments ---\n"
-  print sys.argv
+  print ("\n--- Invoking run.py target with arguments ---\n")
+  print (sys.argv)
   run_base.main_base(sys.argv[1:], script_dir, module_name)
 

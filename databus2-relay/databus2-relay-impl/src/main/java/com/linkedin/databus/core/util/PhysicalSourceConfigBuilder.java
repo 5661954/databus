@@ -34,16 +34,16 @@ import com.linkedin.databus2.relay.config.PhysicalSourceStaticConfig;
 public class PhysicalSourceConfigBuilder implements ConfigBuilder<PhysicalSourceStaticConfig[]>
 {
   private static final Logger LOG = Logger.getLogger(PhysicalSourceConfigBuilder.class.getName());
-  File[] _fileNames = null;
+  String[] _fileNames = null;
 
   public PhysicalSourceConfigBuilder(String[] fileNames) {
-    _fileNames = new File[fileNames.length];
-    for(int i = 0; i < fileNames.length; ++i) _fileNames[i] = new File(fileNames[i]);
+    _fileNames = new String[fileNames.length];
+    for(int i = 0; i < fileNames.length; ++i) _fileNames[i] = new String(fileNames[i]);
   }
 
   public PhysicalSourceConfigBuilder(String baseDir, String[] fileNames) {
-    _fileNames = new File[fileNames.length];
-    for(int i = 0; i < fileNames.length; ++i) _fileNames[i] = new File(baseDir, fileNames[i]);
+    _fileNames = new String[fileNames.length];
+    for(int i = 0; i < fileNames.length; ++i) _fileNames[i] = baseDir.concat(fileNames[i]);
   }
 
   @Override
@@ -74,7 +74,6 @@ public class PhysicalSourceConfigBuilder implements ConfigBuilder<PhysicalSource
       }
       pConfig.checkForNulls();
       LOG.info("Generated Physical source config: name= " + pConfig.getId());
-
       list[i] = pConfig.build();
     }
     /*
@@ -86,4 +85,5 @@ public class PhysicalSourceConfigBuilder implements ConfigBuilder<PhysicalSource
     */
     return list;
   }
+
 }

@@ -47,31 +47,36 @@ ext.externalDependency = [
     'zookeeper': 'org.apache.zookeeper:zookeeper:3.3.3',
     'ojdbc6': 'com.oracle:ojdbc6:11.2.0.2.0',
     'helixCore': 'org.apache.helix:helix-core:0.6.2.0',
+    'jts': 'com.vividsolutions:jts:1.13',
     'or': 'com.linkedin.dds-mysql:open-replicator-impl:1.0.63',
     'c3p0': 'com.mchange:c3p0:0.9.5'
 ];
 
 if (isDefaultEnvironment) {
-  externalDependency['mysqlConnectorJava'] = 'mysql:mysql-connector-java:5.1.14'
+  externalDependency['mysqlConnectorJava'] = 'mysql:mysql-connector-java:8.0.20'
   externalDependency['helixCore'] = 'org.apache.helix:helix-core:0.6.2-incubating'
-  externalDependency['or'] = 'com.google:open-replicator:1.0.7'
+//  externalDependency['or'] = 'com.google:open-replicator:1.0.7'
+  externalDependency['or'] = 'com.google:open-replicator:1.6.0'
   externalDependency['log4j'] = 'org.slf4j:slf4j-log4j12:1.6.1'
 }
 
 tasks.withType(JavaCompile).all { JavaCompile compile ->
-  compile.options.compilerArgs = ['-Xlint', '-Xlint:-path']
+    compile.options.compilerArgs = ['-Xlint:none', '-Xlint:-path', '-Xlint:-deprecation', '-Xlint:-unchecked',
+                                    "--add-exports", "java.base/sun.nio.ch=ALL-UNNAMED",
+                                    "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED"
+                                    ]
 }
 /* workaround for GRADLE-2243 (http://issues.gradle.org/browse/GRADLE-2243) */
-tasks.withType(FindBugs) {
-  ignoreFailures=true
-  effort="max"
-  reportLevel="medium"
-  def f = new File("${project.projectDir}", "FindBugs-excludes.xml")
-  if ( f.exists()) {
-	  logger.info("{} uses FindBugs excludes: {}", project, f.getAbsolutePath())
-	  excludeFilter= file("${project.projectDir}/FindBugs-excludes.xml")
-  }
-}
+//tasks.withType(FindBugs) {
+//  ignoreFailures=true
+//  effort="max"
+//  reportLevel="medium"
+//  def f = new File("${project.projectDir}", "FindBugs-excludes.xml")
+//  if ( f.exists()) {
+//	  logger.info("{} uses FindBugs excludes: {}", project, f.getAbsolutePath())
+//	  excludeFilter= file("${project.projectDir}/FindBugs-excludes.xml")
+//  }
+//}
 
 plugins.withType(JavaPlugin) {
 
@@ -86,10 +91,10 @@ plugins.withType(JavaPlugin) {
 
 
 	if (isDefaultEnvironment) {
-	    plugins.apply('findbugs')
+//	    plugins.apply('findbugs')
 	}
 
-    sourceCompatibility = JavaVersion.VERSION_1_6
+    sourceCompatibility = JavaVersion.VERSION_11
     configurations {
 
       all*.exclude group: 'com.sun.jdmk', module: 'jmxtools'
@@ -129,7 +134,7 @@ plugins.withType(JavaPlugin) {
 
       artifacts {
         archives sourcesJar
-        archives javadocJar
+//        archives javadocJar
       }
     }
 

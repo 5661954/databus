@@ -19,13 +19,11 @@ package com.linkedin.databus2.core.container.netty;
 */
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -95,6 +93,7 @@ import com.linkedin.databus2.core.container.request.ContainerAdminRequestProcess
 import com.linkedin.databus2.core.container.request.ContainerStatsRequestProcessor;
 import com.linkedin.databus2.core.container.request.JavaStatsRequestProcessor;
 import com.linkedin.databus2.core.container.request.RequestProcessorRegistry;
+import org.mortbay.util.UrlEncoded;
 
 /**
  * A serving container
@@ -899,7 +898,7 @@ public abstract class ServerContainer
         for (String propFile: _cmd.getOptionValues(CONTAINER_PROPS_OPT_CHAR))
         {
           LOG.info("Loading container config from properties file " + propFile);
-          FileInputStream fis = new FileInputStream(propFile);
+          InputStream fis = propInputStream(propFile);
           try
           {
             _configProps.load(fis);
@@ -928,6 +927,14 @@ public abstract class ServerContainer
       {
         //Print out Netty Logging only if we want a very detailed log
         InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
+      }
+    }
+
+    private InputStream propInputStream(String propFile) throws FileNotFoundException {
+      try{
+        return new URL(propFile).openStream();
+      }catch (Exception e){
+        return new FileInputStream(propFile);
       }
     }
 
