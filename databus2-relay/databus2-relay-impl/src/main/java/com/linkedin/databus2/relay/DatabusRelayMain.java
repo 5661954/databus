@@ -24,10 +24,7 @@ package com.linkedin.databus2.relay;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -291,7 +288,8 @@ public class DatabusRelayMain extends HttpRelay {
     HttpRelay.StaticConfig staticConfig = cli.getRelayConfigBuilder().build();
 
     // Create and initialize the server instance
-    DatabusRelayMain serverContainer = new DatabusRelayMain(staticConfig, pStaticConfigs);
+    DatabusRelayMain serverContainer = new DatabusRelayMain(staticConfig, Optional.ofNullable(pStaticConfigs)
+	.orElse(staticConfig.getPhysicalSourcesConfigs()));
 
     serverContainer.initProducers();
     serverContainer.registerShutdownHook();

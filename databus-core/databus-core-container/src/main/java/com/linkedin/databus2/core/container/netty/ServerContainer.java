@@ -26,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -345,6 +346,7 @@ public abstract class ServerContainer
 
         _jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(jmxServiceUrl, null,
                                                                          getMbeanServer());
+        LocateRegistry.createRegistry(_containerStaticConfig.getJmx().getRmiRegistryPort());
       }
       catch (Exception e)
       {

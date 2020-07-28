@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.linkedin.databus2.relay.config.*;
 import org.apache.avro.Schema;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -81,11 +82,6 @@ import com.linkedin.databus2.core.container.request.RequestProcessorRegistry;
 import com.linkedin.databus2.core.container.request.SleepRequestProcessor;
 import com.linkedin.databus2.producers.EventCreationException;
 import com.linkedin.databus2.relay.AddRemovePartitionInterface;
-import com.linkedin.databus2.relay.config.DataSourcesStaticConfig;
-import com.linkedin.databus2.relay.config.DataSourcesStaticConfigBuilder;
-import com.linkedin.databus2.relay.config.LogicalSourceConfig;
-import com.linkedin.databus2.relay.config.PhysicalSourceConfig;
-import com.linkedin.databus2.relay.config.PhysicalSourceStaticConfig;
 import com.linkedin.databus2.schemas.FileSystemSchemaRegistryService;
 import com.linkedin.databus2.schemas.SchemaRegistryConfigBuilder;
 import com.linkedin.databus2.schemas.SchemaRegistryService;
@@ -1047,6 +1043,11 @@ public class HttpRelay extends ServerContainer implements AddRemovePartitionInte
               new PhysicalSourceConfigBuilder(physConfDirName, sourcesConfigFiles);
           PhysicalSourceStaticConfig[] confsFromFiles = fileConfBuilder.build();
           System.arraycopy(confsFromFiles, 0, physConfigs, physConfIdx, confsFromFiles.length);
+            for (PhysicalSourceStaticConfig  pcfg: confsFromFiles) {
+                for(LogicalSourceStaticConfig lsc:pcfg.getSources()){
+                    setSourceName(Short.toString(lsc.getId()), lsc.getName());
+                }
+            }
         }
 
         return physConfigs;

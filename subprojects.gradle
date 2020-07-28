@@ -48,6 +48,7 @@ ext.externalDependency = [
     'ojdbc6': 'com.oracle:ojdbc6:11.2.0.2.0',
     'helixCore': 'org.apache.helix:helix-core:0.6.2.0',
     'jts': 'com.vividsolutions:jts:1.13',
+//    'replicator': 'com.flipkart:open-replicator:1.0.8',
     'or': 'com.linkedin.dds-mysql:open-replicator-impl:1.0.63',
     'c3p0': 'com.mchange:c3p0:0.9.5'
 ];
@@ -55,15 +56,15 @@ ext.externalDependency = [
 if (isDefaultEnvironment) {
   externalDependency['mysqlConnectorJava'] = 'mysql:mysql-connector-java:8.0.20'
   externalDependency['helixCore'] = 'org.apache.helix:helix-core:0.6.2-incubating'
-//  externalDependency['or'] = 'com.google:open-replicator:1.0.7'
-  externalDependency['or'] = 'com.google:open-replicator:1.6.0'
+  externalDependency['or'] = 'com.google:open-replicator:1.6.1'
   externalDependency['log4j'] = 'org.slf4j:slf4j-log4j12:1.6.1'
 }
 
 tasks.withType(JavaCompile).all { JavaCompile compile ->
-    compile.options.compilerArgs = ['-Xlint:none', '-Xlint:-path', '-Xlint:-deprecation', '-Xlint:-unchecked',
-                                    "--add-exports", "java.base/sun.nio.ch=ALL-UNNAMED",
-                                    "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED"
+    compile.options.compilerArgs = ['-Xlint:none', '-Xlint:-path', '-Xlint:-deprecation', '-Xlint:-unchecked'
+//                                    ,
+//                                    "--add-exports", "java.base/sun.nio.ch=ALL-UNNAMED",
+//                                    "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED"
                                     ]
 }
 /* workaround for GRADLE-2243 (http://issues.gradle.org/browse/GRADLE-2243) */
@@ -94,7 +95,7 @@ plugins.withType(JavaPlugin) {
 //	    plugins.apply('findbugs')
 	}
 
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_1_8
     configurations {
 
       all*.exclude group: 'com.sun.jdmk', module: 'jmxtools'
